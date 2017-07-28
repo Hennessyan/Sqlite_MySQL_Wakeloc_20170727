@@ -30,7 +30,8 @@ public class GpsDbHelper extends SQLiteOpenHelper{
                 GpsContract.GpsEntry.COLUMN_LATITUDE + " REAL NOT NULL, " +
                 GpsContract.GpsEntry.COLUMN_LONGITUDE + " REAL NOT NULL, " +
                 GpsContract.GpsEntry.COLUMN_BEARING + " REAL NOT NULL, " +
-                GpsContract.GpsEntry.COLUMN_SPEED + " REAL NOT NULL" +
+                GpsContract.GpsEntry.COLUMN_SPEED + " REAL NOT NULL, " +
+                GpsContract.GpsEntry.COLUMN_FLAG + " INTEGER NOT NULL" +
                 ");";
         db.execSQL(SQL_CREATE_GPS_LOACTION_TABLE);
         Log.e("=====GPS table=====","success!");

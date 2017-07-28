@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,17 +30,32 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import okhttp3.OkHttpClient;
 
+import static com.llu17.youngq.sqlite_gps.CollectorService.mark;
+
 
 public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener{
 
 
     private String sampling_rate;
     static TextView upload_state;
+    private Button MarkBusStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MarkBusStop = (Button)findViewById(R.id.Mark_Bus_Stop);
+        MarkBusStop.setOnClickListener(new Button.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mark[0] = true;
+                Toast.makeText(getApplicationContext(), "Mark this position as bus stop", Toast.LENGTH_SHORT).show();
+            }
+
+        });
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -64,13 +81,14 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         }
 
 
-        int v = 0;
-        try {
-            v = getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        Log.e("version:-------",""+ v);
+//        int v = 0;
+//        try {
+//            v = getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        Log.e("version:-------",""+ v);
+
         //Can't use:
         //ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
         //android.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS }

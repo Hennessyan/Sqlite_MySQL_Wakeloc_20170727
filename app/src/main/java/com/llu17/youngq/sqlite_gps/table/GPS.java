@@ -11,17 +11,30 @@ public class GPS {
     private double longitude;
     private double bearing;
     private double speed;
+    private int flag;
 
-    public GPS(String id, long timestamp, double latitude, double longitude, double bearing, double speed){
+
+
+    public GPS(String id, long timestamp, double latitude, double longitude, double bearing, double speed, int flag){
         this.id = id;
         this.timestamp = timestamp;
         this.latitude = latitude;
         this.longitude = longitude;
         this.bearing = bearing;
         this.speed = speed;
+        this.flag = flag;
+
     }
 
     public GPS() {}
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     public double getBearing() {
         return bearing;
@@ -74,6 +87,7 @@ public class GPS {
     @Override
     public String toString(){
         return "GPS: {" + " id: " + id + " timestamp: " + timestamp + " latitude: "
-                + latitude + " longitude: " + longitude + " bearing: " + bearing + " speed: " + speed + " }";
+                + latitude + " longitude: " + longitude + " bearing: " + bearing + " speed: "
+                + speed + " flag: " + flag + " }";
     }
 }

@@ -212,7 +212,7 @@ public class VariableManager {
 //        dbHelper = new GpsDbHelper(this);
         db1 = dbHelper1.getReadableDatabase();
         Cursor c = null;
-        String s = "select Id, timestamp, latitude, longitude, bearing, speed from gps_location where Tag = 0 limit " + sizeOfUpload + ";";
+        String s = "select Id, timestamp, latitude, longitude, bearing, speed , flag from gps_location where Tag = 0 limit " + sizeOfUpload + ";";
         try {
             c = db1.rawQuery(s, null);
             Log.e("cursor count gps: ", "" + c.getCount());
@@ -227,6 +227,7 @@ public class VariableManager {
                     gps.setLongitude(c.getDouble(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_LONGITUDE)));
                     gps.setBearing(c.getDouble(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_BEARING)));
                     gps.setSpeed(c.getDouble(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_SPEED)));
+                    gps.setFlag(c.getInt(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_FLAG)));
                     gpslist.add(gps);
                 }
                 return gpslist;
@@ -488,6 +489,7 @@ public class VariableManager {
                     gps_object.put("Longitude", gpses.get(i).getLongitude());
                     gps_object.put("Bearing", gpses.get(i).getBearing());
                     gps_object.put("Speed", gpses.get(i).getSpeed());
+                    gps_object.put("Flag", gpses.get(i).getFlag());
                     GpsJsonArray.put(gps_object);
                 } catch (JSONException e) {
                     e.printStackTrace();

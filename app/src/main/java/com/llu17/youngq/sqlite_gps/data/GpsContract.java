@@ -16,6 +16,7 @@ public class GpsContract {
         public static final String COLUMN_LONGITUDE = "longitude";
         public static final String COLUMN_BEARING = "bearing";
         public static final String COLUMN_SPEED = "speed";
+        public static final String COLUMN_FLAG = "flag";    //mark the bus stop
     }
     public static final class AccelerometerEntry implements BaseColumns{
         public static final String TABLE_NAME = "accelerometer";

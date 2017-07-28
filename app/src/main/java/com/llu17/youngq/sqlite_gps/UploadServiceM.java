@@ -121,7 +121,7 @@ public class UploadServiceM extends Service{
         dbHelper = new GpsDbHelper(this);
         db = dbHelper.getReadableDatabase();
         Cursor c = null;
-        String s = "select Id, timestamp, latitude, longitude, bearing, speed from gps_location where Tag = 0 limit 200;";
+        String s = "select Id, timestamp, latitude, longitude, bearing, speed , flag from gps_location where Tag = 0 limit 200;";
         try {
             c = db.rawQuery(s, null);
             Log.e("cursor count gps: ", "" + c.getCount());
@@ -136,6 +136,7 @@ public class UploadServiceM extends Service{
                     gps.setLongitude(c.getDouble(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_LONGITUDE)));
                     gps.setBearing(c.getDouble(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_BEARING)));
                     gps.setSpeed(c.getDouble(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_SPEED)));
+                    gps.setFlag(c.getInt(c.getColumnIndexOrThrow(GpsContract.GpsEntry.COLUMN_FLAG)));
                     gpslist.add(gps);
                 }
                 return gpslist;
@@ -432,6 +433,7 @@ public class UploadServiceM extends Service{
                 gps_object.put("Longitude", gpses.get(i).getLongitude());
                 gps_object.put("Bearing", gpses.get(i).getBearing());
                 gps_object.put("Speed", gpses.get(i).getSpeed());
+                gps_object.put("Flag", gpses.get(i).getFlag());
                 GpsJsonArray.put(gps_object);
             } catch (JSONException e) {
                 e.printStackTrace();

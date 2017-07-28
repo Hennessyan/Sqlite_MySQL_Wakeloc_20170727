@@ -29,10 +29,12 @@ public class Upload extends TimerTask {
     private double[] nums1,nums2,nums3,nums4;
     private int[] nums5;
     private double[] nums6, nums7;
+    private boolean[] nums8;    //mark bus stop
     private int step = 0;
     private int tag = 0;
+    private int mark = 0;       //mark bus stop
 
-    public Upload(double[] array1, double[] array2, double[] array3, double[] array4, int[] array5, double[] array6, double[] array7){
+    public Upload(double[] array1, double[] array2, double[] array3, double[] array4, int[] array5, double[] array6, double[] array7, boolean[] array8){
         nums1 = array1;
         nums2 = array2;
         nums3 = array3;
@@ -40,11 +42,13 @@ public class Upload extends TimerTask {
         nums5 = array5;
         nums6 = array6;
         nums7 = array7;
+        nums8 = array8;
     }
 
 
     @Override
     public void run() {
+        mark = 0;
         long temp_time = System.currentTimeMillis();
         if(checkTimeInRange(temp_time)) {
             if (gps_last[0] == nums4[0] && gps_last[1] == nums4[1]) {
@@ -63,7 +67,11 @@ public class Upload extends TimerTask {
         if(dupCount < 60) {
             count++;
 //            long temp_time = System.currentTimeMillis();
-
+            if(nums8[0]){
+                mark = 1;
+                nums8[0] = false;
+            }
+            Log.e("timestamp: " + temp_time, " mark: " + mark);
             ContentValues cv_acce = new ContentValues();
             cv_acce.put(GpsContract.AccelerometerEntry.COLUMN_ID, id);
             cv_acce.put(GpsContract.AccelerometerEntry.COLUMN_TAG, tag);
@@ -95,6 +103,7 @@ public class Upload extends TimerTask {
             cv_gps.put(GpsContract.GpsEntry.COLUMN_LONGITUDE, nums4[1]);
             cv_gps.put(GpsContract.GpsEntry.COLUMN_BEARING, nums7[0]);
             cv_gps.put(GpsContract.GpsEntry.COLUMN_SPEED, nums7[1]);
+            cv_gps.put(GpsContract.GpsEntry.COLUMN_FLAG, mark);
 
             ContentValues cv_motion = new ContentValues();
             cv_motion.put(GpsContract.MotionStateEntry.COLUMN_ID, id);

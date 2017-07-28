@@ -53,6 +53,7 @@ public class CollectorService extends Service implements SensorEventListener {
     private double[] gps_location = new double[2]; //location 1.latitude 2.longitude
     private double[] bearAndSpeed = new double[2];    //1.bearing 2.speed   sqlite just has real type, so we use double here
     public static String id = ""; //phone id
+    public static boolean[] mark = new boolean[]{false};    //used to mark bus stop
 
     public LocationListener locationListener = new LocationListener() {
         @Override
@@ -212,7 +213,7 @@ public class CollectorService extends Service implements SensorEventListener {
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 //        Toast.makeText(this, "Sensor Service Started", Toast.LENGTH_SHORT).show();
         timer = new Timer();
-        timer.schedule(new Upload(acce, gyro, stepcount, gps_location, state, d_magnetic, bearAndSpeed), 0, sampling_rate);
+        timer.schedule(new Upload(acce, gyro, stepcount, gps_location, state, d_magnetic, bearAndSpeed, mark), 0, sampling_rate);
         timer1 = new Timer();
         timer1.schedule(new Upload1(batteryPercentage, wifistate), 0, 60000);   //change to 60000
         return START_STICKY;
