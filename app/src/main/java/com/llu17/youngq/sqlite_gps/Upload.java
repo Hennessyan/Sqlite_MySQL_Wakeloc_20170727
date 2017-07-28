@@ -19,6 +19,8 @@ import static com.llu17.youngq.sqlite_gps.CollectorService.mDb;
  */
 
 public class Upload extends TimerTask {
+    //将upload method放在start中进行更新记录时,传递数据要使用数组,不能使用普通变量去传或者接收
+    //否则获得的值始终为默认的初始值0
 
     private double[] gps_last = new double[]{0.0, 0.0};
     private long dupCount = 0;  //record number of duplication
@@ -26,11 +28,9 @@ public class Upload extends TimerTask {
     private int count = 0;
     private double[] nums1,nums2,nums3,nums4;
     private int[] nums5;
-    private double[] nums6;
+    private double[] nums6, nums7;
     private int step = 0;
     private int tag = 0;
-    private double bearing;
-    private double speed;
 
     public Upload(double[] array1, double[] array2, double[] array3, double[] array4, int[] array5, double[] array6, double[] array7){
         nums1 = array1;
@@ -39,8 +39,7 @@ public class Upload extends TimerTask {
         nums4 = array4;
         nums5 = array5;
         nums6 = array6;
-        this.bearing = array7[0];
-        this.speed = array7[1];
+        nums7 = array7;
     }
 
 
@@ -94,8 +93,8 @@ public class Upload extends TimerTask {
             cv_gps.put(GpsContract.GpsEntry.COLUMN_TIMESTAMP, temp_time);
             cv_gps.put(GpsContract.GpsEntry.COLUMN_LATITUDE, nums4[0]);
             cv_gps.put(GpsContract.GpsEntry.COLUMN_LONGITUDE, nums4[1]);
-            cv_gps.put(GpsContract.GpsEntry.COLUMN_BEARING, bearing);
-            cv_gps.put(GpsContract.GpsEntry.COLUMN_SPEED, speed);
+            cv_gps.put(GpsContract.GpsEntry.COLUMN_BEARING, nums7[0]);
+            cv_gps.put(GpsContract.GpsEntry.COLUMN_SPEED, nums7[1]);
 
             ContentValues cv_motion = new ContentValues();
             cv_motion.put(GpsContract.MotionStateEntry.COLUMN_ID, id);

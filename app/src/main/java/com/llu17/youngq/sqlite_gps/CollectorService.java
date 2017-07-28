@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
@@ -32,6 +33,7 @@ import com.llu17.youngq.sqlite_gps.data.GpsDbHelper;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Timer;
+
 
 
 /**
@@ -57,16 +59,17 @@ public class CollectorService extends Service implements SensorEventListener {
         public void onLocationChanged(Location location) {
             Log.e("===location===","changed!");
 
+
             bearAndSpeed[0] = location.getBearing();
             bearAndSpeed[1] = location.getSpeed();
 
-//            gps_location[0] = location.getLatitude();
-//            gps_location[1] = location.getLongitude();
+            gps_location[0] = location.getLatitude();
+            gps_location[1] = location.getLongitude();
 
-            BigDecimal bg = new BigDecimal(location.getLatitude());
-            BigDecimal bg1 = new BigDecimal(location.getLongitude());
-            gps_location[0] = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-            gps_location[1] = bg1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+//            BigDecimal bg = new BigDecimal(location.getLatitude());
+//            BigDecimal bg1 = new BigDecimal(location.getLongitude());
+//            gps_location[0] = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+//            gps_location[1] = bg1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
 
         @Override
@@ -180,6 +183,16 @@ public class CollectorService extends Service implements SensorEventListener {
         }
         Log.e("===GPS===","===begin===");
 //        Toast.makeText(this, "Starting the GPS!!!!!", Toast.LENGTH_SHORT).show();
+
+//        LocationProvider info = locationManager.getProvider(LocationManager.GPS_PROVIDER);
+//        if(info.supportsBearing())
+//            Log.e("=========","support bearing");
+//        else
+//            Log.e("=========","not support bearing");
+//        if(info.supportsSpeed())
+//            Log.e("=========","support speed");
+//        else
+//            Log.e("=========","not support speed");
         /*===Sensor===*/
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
