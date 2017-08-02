@@ -65,7 +65,7 @@ public class GpsContract {
         public static final String COLUMN_State = "State";
     }
     public static final class MagnetometerEntry implements BaseColumns{
-        public static final String TABLE_NAME = "Magnetometer";
+        public static final String TABLE_NAME = "magnetometer";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_TAG = "Tag";
         public static final String COLUMN_TIMESTAMP = "timestamp";

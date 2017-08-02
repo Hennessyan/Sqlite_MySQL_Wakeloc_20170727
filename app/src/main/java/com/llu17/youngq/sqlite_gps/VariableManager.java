@@ -628,7 +628,7 @@ public class VariableManager {
         if(magnetometers.size() == sizeOfUpload) {
             MagneJsonArray = null;
             MagneJsonArray = new JSONArray();
-            for (int i = 0; i < acces.size(); i++) {
+            for (int i = 0; i < magnetometers.size(); i++) {
                 magne_object = new JSONObject();
                 try {
                     magne_object.put("UserID", magnetometers.get(i).getId());
