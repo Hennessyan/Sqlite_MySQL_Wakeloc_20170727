@@ -21,7 +21,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
     private String sampling_rate;
     static TextView upload_state;
     private Button MarkBusStop;
+    private Switch DataCollectionSwitch, AutoCheckUploadSwitch, ManuCheckUploadSwitch;
+    private SharedPreferences.Editor editor;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +62,24 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
 
         });
 
+        DataCollectionSwitch = (Switch) findViewById(R.id.DataCollectionSwitch);
+        AutoCheckUploadSwitch = (Switch) findViewById(R.id.AutoCheckUploadSwitch);
+        ManuCheckUploadSwitch = (Switch) findViewById(R.id.ManuCheckUploadSwitch);
+
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         sampling_rate = sharedPreferences.getString(getResources().getString(R.string.sr_key_all),"1000");
         Log.e("-----ALL SR-----",""+sampling_rate);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
+        /*used to keep the status recorded, otherwise everytime reopen the app, switch will be off*/
+        editor = getSharedPreferences("com.llu17.youngq.sqlite_gps", MODE_PRIVATE).edit();
+        prefs = getSharedPreferences("com.llu17.youngq.sqlite_gps", MODE_PRIVATE);
+
+        DataCollectionSwitch.setChecked(prefs.getBoolean("DCS_status",false));
+        AutoCheckUploadSwitch.setChecked(prefs.getBoolean("ACU_status",false));
+        ManuCheckUploadSwitch.setChecked(prefs.getBoolean("MCU_status",false));
         //////////
         /*===check sqlite data using "chrome://inspect"===*/
         Stetho.initializeWithDefaults(this);
@@ -113,6 +130,46 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
             e.printStackTrace();
         }
 
+        DataCollectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
+                Log.e("DataCollectionSwitch","i am here !");
+                editor.putBoolean("DCS_status", bChecked);
+                editor.commit();
+                if (bChecked) {
+                    startService();
+                } else {
+                    stopService();
+                }
+            }
+        });
+        AutoCheckUploadSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
+                Log.e("AutoCheckUploadSwitch","i am here !");
+                editor.putBoolean("ACU_status", bChecked);
+                editor.commit();
+                if (bChecked) {
+                    uploadService();
+                } else {
+                    breakService();
+                }
+            }
+        });
+        ManuCheckUploadSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
+                Log.e("ManuCheckUploadSwitch","i am here !");
+                editor.putBoolean("MCU_status", bChecked);
+                editor.commit();
+                if (bChecked) {
+                    uploadServiceM();
+                } else {
+                    breakServiceM();
+                }
+            }
+        });
+
     }
     /*Sampling rate menu*/
     //Add the menu to the menu bar
@@ -142,7 +199,7 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
             Log.e("-----ALL SR-----","changed: "+sampling_rate);
         }
     }
-    public void startService(View view) {
+    public void startService() {        //startService(View view) 如果使用button.click去控制就要使用:startService(View v)
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
         Log.e("unregister","success");
@@ -153,7 +210,7 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
     }
 
     // Method to stop the service
-    public void stopService(View view) {
+    public void stopService() {         //stopService(View view)
         Toast.makeText(this, "Stopping the service", Toast.LENGTH_SHORT).show();
         stopService(new Intent(getBaseContext(), CollectorService.class));
         stopService(new Intent(getBaseContext(), Activity_Tracker.class));
@@ -161,22 +218,22 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
 
     }
 
-    public void uploadService(View view){
+    public void uploadService(){        //uploadService(View view)
         Toast.makeText(this, "Begin to upload data automatically", Toast.LENGTH_SHORT).show();
         startService(new Intent(getBaseContext(), UploadService.class));
     }
 
-    public void breakService(View view){
+    public void breakService(){        //breakService(View view)
         Toast.makeText(this, "Stop to upload data automatically", Toast.LENGTH_SHORT).show();
         stopService(new Intent(getBaseContext(), UploadService.class));
     }
 
-    public void uploadServiceM(View view){
+    public void uploadServiceM(){      //uploadServiceM(View view)
         Toast.makeText(this, "Begin to upload data manually", Toast.LENGTH_SHORT).show();
         startService(new Intent(getBaseContext(), UploadServiceM.class));
     }
 
-    public void breakServiceM(View view){
+    public void breakServiceM(){       //breakServiceM(View view)
         Toast.makeText(this, "Stop to upload data manually", Toast.LENGTH_SHORT).show();
         stopService(new Intent(getBaseContext(), UploadServiceM.class));
     }

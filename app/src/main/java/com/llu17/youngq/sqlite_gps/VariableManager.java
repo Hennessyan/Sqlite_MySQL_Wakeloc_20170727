@@ -45,7 +45,7 @@ public class VariableManager {
     private SQLiteDatabase db1, db2, db3, db4, db5, db6, db7, db8;
     private JSONObject acce_object,gyro_object,gps_object,motion_object,step_object,battery_object,wifi_object,magne_object;
     private JSONArray AcceJsonArray,GyroJsonArray,GpsJsonArray,MotionJsonArray,StepJsonArray,BatteryJsonArray,WiFiJsonArray,MagneJsonArray;
-    private int sizeOfUpload = 20;
+    private int sizeOfUpload = 50;
 
     public static ArrayList<GPS> gpses;
     public static ArrayList<ACCELEROMETER> acces;
@@ -173,14 +173,14 @@ public class VariableManager {
                     e.printStackTrace();
                 }
 
-                Log.e("result[0]","!!!!!"+result[0]);
-                Log.e("result[1]","!!!!!"+result[1]);
-                Log.e("result[2]","!!!!!"+result[2]);
-                Log.e("result[3]","!!!!!"+result[3]);
-                Log.e("result[4]","!!!!!"+result[4]);
-                Log.e("result[5]","!!!!!"+result[5]);
-                Log.e("result[6]","!!!!!"+result[6]);
-                Log.e("result[7]","!!!!!"+result[7]);
+//                Log.e("result[0]","!!!!!"+result[0]);
+//                Log.e("result[1]","!!!!!"+result[1]);
+//                Log.e("result[2]","!!!!!"+result[2]);
+//                Log.e("result[3]","!!!!!"+result[3]);
+//                Log.e("result[4]","!!!!!"+result[4]);
+//                Log.e("result[5]","!!!!!"+result[5]);
+//                Log.e("result[6]","!!!!!"+result[6]);
+//                Log.e("result[7]","!!!!!"+result[7]);
                 for(int i = 0; i < 8; i++) {
                     if (result[i] == 200)
                         myBoolean[i] = true;
